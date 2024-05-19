@@ -6,7 +6,7 @@
 
 #include "vulkan/vulkan.h"
 #include "GLFW/glfw3.h"
-#include "core/core.h"
+#include "core/context.hpp"
 #include <memory>
 
 namespace Runtime{

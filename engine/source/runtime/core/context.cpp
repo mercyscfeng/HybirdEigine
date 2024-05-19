@@ -1,58 +1,55 @@
 #include "context.hpp"
 #define APP_SHORT_NAME  "hybird_instance"
 
-namespace hybirdEigine{
+namespace Runtime{
    std::unique_ptr<Context> Context::_instance = nullptr;
    void Context::StartUp() {
-       _instance.reset(new Context);
+       createVkInstance();
+       pickupPhysicalDevice();
    }
 
    void Context::Destory() {
+       _instance->instance.destroy();
        _instance.reset();
    }
 
    Context& Context::GetInstance() {
+       if(!_instance){
+           _instance.reset(new Context);
+       }
        return *_instance;
    }
 
    Context::Context() {
+   }
+   Context::~Context(){
 
+   }
+   void Context::createVkInstance() {
        std::cout << "create vkinstance " << std::endl;
-       VkInstanceCreateInfo createInfo;
 
-       // initialize the VkApplicationInfo structure
-       VkApplicationInfo app_info = {};
-       app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-       app_info.pNext = NULL;
-       app_info.pApplicationName = APP_SHORT_NAME;
-       app_info.applicationVersion = 1;
-       app_info.pEngineName = APP_SHORT_NAME;
-       app_info.engineVersion = 1;
-       app_info.apiVersion = VK_API_VERSION_1_3;
+       // initialize the VkInstanceCreateInfo structure
+        vk::InstanceCreateInfo inst_info;
+        vk::Result res =  vk::createInstance(&inst_info, nullptr,&instance);
+        std::cout << make_error_code(res) << std::endl;
+   }
 
-        // initialize the VkInstanceCreateInfo structure
-       VkInstanceCreateInfo inst_info = {};
-       inst_info.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-       inst_info.pNext = NULL;
-       inst_info.flags = 0;
-       inst_info.pApplicationInfo = &app_info;
-       inst_info.enabledExtensionCount = 0;
-       inst_info.ppEnabledExtensionNames = NULL;
-       inst_info.enabledLayerCount = 0;
-       inst_info.ppEnabledLayerNames = NULL;
+   void Context::pickupPhysicalDevice() {
+        auto devices = instance.enumeratePhysicalDevices();
+        for(auto& device:devices){
+//            auto feature = device.getFeatures();
+            std::cout<< device.getProperties().deviceName << "---" << to_string(device.getProperties().deviceType)<< std::endl;
+        }
+       phyDevice = devices[0];
+   }
 
-
-
-       VkResult res = vkCreateInstance(&createInfo,NULL,&instance);
-       if (res == VK_ERROR_INCOMPATIBLE_DRIVER) {
-           std::cout << "cannot find a compatible Vulkan ICD\n";
-           exit(-1);
-       } else if (res) {
-           std::cout << "unknown error\n";
-           exit(-1);
-       }
-       vkDestroyInstance(instance, NULL);
-//       _instance = VKcreateInstance(createInfo);
-
+   void Context::createDevice() {
+       vk::DeviceCreateInfo createInfo;
+       vk::DeviceQueueCreateInfo queueCreateInfo;
+       float  priorities = 1.0;
+       queueCreateInfo.setPNext(&priorities);
+       createInfo.setPQueueCreateInfos(queueCreateInfo);
+//       Command
+        device = phyDevice.createDevice(createInfo);
    }
 }

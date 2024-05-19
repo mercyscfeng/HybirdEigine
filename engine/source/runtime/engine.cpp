@@ -7,12 +7,15 @@
 namespace Runtime{
     std::unique_ptr<Engine> Engine::_instance = nullptr;
     void Engine::StartUp() {
-        _instance.reset(new Engine);
+        Context::GetInstance().StartUp();
     }
     void Engine::Destory() {
         _instance.reset();
     }
     Engine Engine::GetInstance() {
+        if(!_instance){
+            _instance.reset(new Engine);
+        }
         return *_instance;
     }
     Engine::~Engine(){
