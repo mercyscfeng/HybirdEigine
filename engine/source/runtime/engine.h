@@ -2,13 +2,27 @@
 // Created by Administrator on 2024/5/16.
 //
 
-#ifndef HYBIRDEIGEN_ENGINE_H
-#define HYBIRDEIGEN_ENGINE_H
+#pragma once
+
+#include "vulkan/vulkan.h"
+#include "GLFW/glfw3.h"
+#include "core/core.h"
+#include <memory>
+
+namespace Runtime{
+    class Engine {
+    public:
+        void StartUp();
+        void Destory();
+        int CreateWindow();
+        static Engine GetInstance();
+        ~Engine();
+    private:
+        Engine();
+        static std::unique_ptr<Engine> _instance;
+    };
+}
 
 
-class engine {
-
-};
 
 
-#endif //HYBIRDEIGEN_ENGINE_H
