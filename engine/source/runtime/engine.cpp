@@ -1,7 +1,7 @@
 //
 // Created by Administrator on 2024/5/16.
 //
-
+#pragma once
 #include "engine.h"
 
 namespace Runtime{

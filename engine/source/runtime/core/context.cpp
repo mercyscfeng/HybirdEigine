@@ -48,7 +48,7 @@ namespace Runtime{
        vk::DeviceQueueCreateInfo queueCreateInfo;
        float  priorities = 1.0;
        queueCreateInfo.setPNext(&priorities);
-       createInfo.setPQueueCreateInfos(queueCreateInfo);
+//       createInfo.setPQueueCreateInfos(queueCreateInfo);
 //       Command
         device = phyDevice.createDevice(createInfo);
    }
