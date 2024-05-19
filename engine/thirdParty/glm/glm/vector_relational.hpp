@@ -1,10 +1,10 @@
-/// @ref core
+/// @ref rendering
 /// @file glm/vector_relational.hpp
 ///
 /// @see <a href="http://www.opengl.org/registry/doc/GLSLangSpec.4.20.8.pdf">GLSL 4.20.8 specification, section 8.7 Vector Relational Functions</a>
 ///
 /// @defgroup core_func_vector_relational Vector Relational Functions
-/// @ingroup core
+/// @ingroup rendering
 ///
 /// Relational and equality operators (<, <=, >, >=, ==, !=) are defined to
 /// operate on scalars and produce scalar Boolean results. For vector results,
@@ -13,7 +13,7 @@
 /// In all cases, the sizes of all the input and return vectors for any particular
 /// call must match.
 ///
-/// Include <glm/vector_relational.hpp> to use these core features.
+/// Include <glm/vector_relational.hpp> to use these rendering features.
 ///
 /// @see ext_vector_relational
 

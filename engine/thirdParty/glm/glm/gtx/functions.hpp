@@ -1,7 +1,7 @@
 /// @ref gtx_functions
 /// @file glm/gtx/functions.hpp
 ///
-/// @see core (dependence)
+/// @see rendering (dependence)
 /// @see gtc_quaternion (dependence)
 ///
 /// @defgroup gtx_functions GLM_GTX_functions

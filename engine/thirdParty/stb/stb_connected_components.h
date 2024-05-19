@@ -25,7 +25,7 @@
 //
 // PERFORMANCE
 //
-//   On a core i7-2700K at 3.5 Ghz, for a particular 1024x1024 map (map_03.png):
+//   On a rendering i7-2700K at 3.5 Ghz, for a particular 1024x1024 map (map_03.png):
 //
 //       Creating map                   : 44.85 ms
 //       Making one square   traversable:  0.27 ms    (average over 29,448 calls)

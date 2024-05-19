@@ -1,7 +1,7 @@
 /// @ref ext_scalar_packing
 /// @file glm/ext/scalar_packing.hpp
 ///
-/// @see core (dependence)
+/// @see rendering (dependence)
 ///
 /// @defgroup ext_scalar_packing GLM_EXT_scalar_packing
 /// @ingroup ext

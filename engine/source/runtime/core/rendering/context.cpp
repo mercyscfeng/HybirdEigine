@@ -1,7 +1,7 @@
 #include "context.hpp"
 #define APP_SHORT_NAME  "hybird_instance"
 
-namespace Runtime{
+namespace Hybrid{
    std::unique_ptr<Context> Context::_instance = nullptr;
    void Context::StartUp() {
        createVkInstance();
@@ -44,12 +44,14 @@ namespace Runtime{
    }
 
    void Context::createDevice() {
-       vk::DeviceCreateInfo createInfo;
-       vk::DeviceQueueCreateInfo queueCreateInfo;
-       float  priorities = 1.0;
-       queueCreateInfo.setPNext(&priorities);
-//       createInfo.setPQueueCreateInfos(queueCreateInfo);
-//       Command
-        device = phyDevice.createDevice(createInfo);
+//       vk::DeviceCreateInfo createInfo;
+//       vk::DeviceQueueCreateInfo queueCreateInfo;
+//       float  priorities = 1.0;
+//       queueCreateInfo.setPQueuePriorities(&priorities)
+//                      .setQueueCount(1)
+//                      .setQueueFamilyIndex();
+//       createInfo.setPQueueCreateInfos();
+////       Command
+//        device = phyDevice.createDevice(createInfo);
    }
 }

@@ -1,7 +1,7 @@
 /// @ref gtx_color_encoding
 /// @file glm/gtx/color_encoding.hpp
 ///
-/// @see core (dependence)
+/// @see rendering (dependence)
 /// @see gtx_color_encoding (dependence)
 ///
 /// @defgroup gtx_color_encoding GLM_GTX_color_encoding

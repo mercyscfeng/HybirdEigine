@@ -6,7 +6,6 @@
 #include "runtime/engine.h"
 int main() {
     std::cout << "Hello, World!" << std::endl;
-    Runtime::Engine::GetInstance().StartUp();
-    Runtime::Engine::GetInstance().CreateWindow();
+    Hybrid::Engine::GetInstance().StartUp();
     return 0;
 }

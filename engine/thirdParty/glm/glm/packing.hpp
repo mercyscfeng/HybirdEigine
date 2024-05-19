@@ -1,17 +1,17 @@
-/// @ref core
+/// @ref rendering
 /// @file glm/packing.hpp
 ///
 /// @see <a href="http://www.opengl.org/registry/doc/GLSLangSpec.4.20.8.pdf">GLSL 4.20.8 specification, section 8.4 Floating-Point Pack and Unpack Functions</a>
 /// @see gtc_packing
 ///
 /// @defgroup core_func_packing Floating-Point Pack and Unpack Functions
-/// @ingroup core
+/// @ingroup rendering
 ///
 /// Provides GLSL functions to pack and unpack half, single and double-precision floating point values into more compact integer types.
 ///
 /// These functions do not operate component-wise, rather as described in each case.
 ///
-/// Include <glm/packing.hpp> to use these core features.
+/// Include <glm/packing.hpp> to use these rendering features.
 
 #pragma once
 

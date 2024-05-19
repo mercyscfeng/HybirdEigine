@@ -1,4 +1,4 @@
-/// @ref core
+/// @ref rendering
 /// @file glm/vec4.hpp
 
 #pragma once

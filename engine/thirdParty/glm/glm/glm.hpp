@@ -1,25 +1,25 @@
-/// @ref core
+/// @ref rendering
 /// @file glm/glm.hpp
 ///
-/// @defgroup core Core features
+/// @defgroup rendering Core features
 ///
 /// @brief Features that implement in C++ the GLSL specification as closely as possible.
 ///
-/// The GLM core consists of C++ types that mirror GLSL types and
+/// The GLM rendering consists of C++ types that mirror GLSL types and
 /// C++ functions that mirror the GLSL functions.
 ///
 /// The best documentation for GLM Core is the current GLSL specification,
 /// <a href="http://www.opengl.org/registry/doc/GLSLangSpec.4.20.8.clean.pdf">version 4.2
 /// (pdf file)</a>.
 ///
-/// GLM core functionalities require <glm/glm.hpp> to be included to be used.
+/// GLM rendering functionalities require <glm/glm.hpp> to be included to be used.
 ///
 ///
 /// @defgroup core_vector Vector types
 ///
 /// Vector types of two to four components with an exhaustive set of operators.
 ///
-/// @ingroup core
+/// @ingroup rendering
 ///
 ///
 /// @defgroup core_vector_precision Vector types with precision qualifiers
@@ -35,7 +35,7 @@
 ///
 /// None of these types make any guarantees about the actual qualifier used.
 ///
-/// @ingroup core
+/// @ingroup rendering
 ///
 ///
 /// @defgroup core_matrix Matrix types
@@ -43,7 +43,7 @@
 /// Matrix types of with C columns and R rows where C and R are values between 2 to 4 included.
 /// These types have exhaustive sets of operators.
 ///
-/// @ingroup core
+/// @ingroup rendering
 ///
 ///
 /// @defgroup core_matrix_precision Matrix types with precision qualifiers
@@ -59,7 +59,7 @@
 ///
 /// None of these types make any guarantees about the actual qualifier used.
 ///
-/// @ingroup core
+/// @ingroup rendering
 ///
 ///
 /// @defgroup ext Stable extensions

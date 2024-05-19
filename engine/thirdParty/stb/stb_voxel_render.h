@@ -765,7 +765,7 @@ struct stbvox_input_description
    // in use and that I could easily steal 2 bits from.)
 
    stbvox_block_type *blocktype;
-   // Indexed by 3D coordinate. This is a core "block type" value, which is used
+   // Indexed by 3D coordinate. This is a rendering "block type" value, which is used
    // to index into other arrays; essentially a "palette". This is much more
    // memory-efficient and performance-friendly than storing the values explicitly,
    // but only makes sense if the values are always synchronized.
@@ -815,17 +815,17 @@ struct stbvox_input_description
 
    unsigned char *color;
    // Indexed by 3D coordinate. Contains the color for all faces of the block.
-   // The core color value is 0..63.
+   // The rendering color value is 0..63.
    // Encode with STBVOX_MAKE_COLOR(color_number, tex1_enable, tex2_enable)
 
    unsigned char *block_color;
    // Array indexed by blocktype containing the color value to apply to the faces.
-   // The core color value is 0..63.
+   // The rendering color value is 0..63.
    // Encode with STBVOX_MAKE_COLOR(color_number, tex1_enable, tex2_enable)
 
    unsigned char (*block_color_face)[6];
    // Array indexed by blocktype and face containing the color value to apply to that face.
-   // The core color value is 0..63.
+   // The rendering color value is 0..63.
    // Encode with STBVOX_MAKE_COLOR(color_number, tex1_enable, tex2_enable)
 
    unsigned char *block_texlerp;

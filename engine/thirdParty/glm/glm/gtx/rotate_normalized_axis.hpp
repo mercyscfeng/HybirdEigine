@@ -1,7 +1,7 @@
 /// @ref gtx_rotate_normalized_axis
 /// @file glm/gtx/rotate_normalized_axis.hpp
 ///
-/// @see core (dependence)
+/// @see rendering (dependence)
 /// @see gtc_matrix_transform
 /// @see gtc_quaternion
 ///

@@ -1,7 +1,7 @@
 /// @ref gtx_fast_trigonometry
 /// @file glm/gtx/fast_trigonometry.hpp
 ///
-/// @see core (dependence)
+/// @see rendering (dependence)
 ///
 /// @defgroup gtx_fast_trigonometry GLM_GTX_fast_trigonometry
 /// @ingroup gtx

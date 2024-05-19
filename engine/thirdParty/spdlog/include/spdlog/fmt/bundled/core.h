@@ -1,4 +1,4 @@
-// Formatting library for C++ - the core API for char/UTF-8
+// Formatting library for C++ - the rendering API for char/UTF-8
 //
 // Copyright (c) 2012 - present, Victor Zverovich
 // All rights reserved.
@@ -1068,7 +1068,7 @@ enum class type {
   custom_type
 };
 
-// Maps core type T to the corresponding type enum constant.
+// Maps rendering type T to the corresponding type enum constant.
 template <typename T, typename Char>
 struct type_constant : std::integral_constant<type, type::custom_type> {};
 
@@ -1198,7 +1198,7 @@ using ulong_type = conditional_t<long_short, unsigned, unsigned long long>;
 
 struct unformattable {};
 
-// Maps formatting arguments to core types.
+// Maps formatting arguments to rendering types.
 template <typename Context> struct arg_mapper {
   using char_type = typename Context::char_type;
 
@@ -2742,7 +2742,7 @@ inline void vprint_mojibake(std::FILE*, string_view, format_args) {}
 #endif
 FMT_END_DETAIL_NAMESPACE
 
-// A formatter specialization for the core types corresponding to detail::type
+// A formatter specialization for the rendering types corresponding to detail::type
 // constants.
 template <typename T, typename Char>
 struct formatter<T, Char,
@@ -2877,7 +2877,7 @@ FMT_API auto vformat(string_view fmt, format_args args) -> std::string;
 
   **Example**::
 
-    #include <fmt/core.h>
+    #include <fmt/rendering.h>
     std::string message = fmt::format("The answer is {}", 42);
   \endrst
 */

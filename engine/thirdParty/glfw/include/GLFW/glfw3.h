@@ -2616,7 +2616,7 @@ GLFWAPI void glfwWindowHintString(int hint, const char* value);
  *  @remark @win32 The context to share resources with must not be current on
  *  any other thread.
  *
- *  @remark @macos The OS only supports forward-compatible core profile contexts
+ *  @remark @macos The OS only supports forward-compatible rendering profile contexts
  *  for OpenGL versions 3.2 and later.  Before creating an OpenGL context of
  *  version 3.2 or later you must set the
  *  [GLFW_OPENGL_FORWARD_COMPAT](@ref GLFW_OPENGL_FORWARD_COMPAT_hint) and
@@ -5733,7 +5733,7 @@ GLFWAPI const char** glfwGetRequiredInstanceExtensions(uint32_t* count);
 
 /*! @brief Returns the address of the specified Vulkan instance function.
  *
- *  This function returns the address of the specified Vulkan core or extension
+ *  This function returns the address of the specified Vulkan rendering or extension
  *  function for the specified instance.  If instance is set to `NULL` it can
  *  return any function exported from the Vulkan loader, including at least the
  *  following functions:
