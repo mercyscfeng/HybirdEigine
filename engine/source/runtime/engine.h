@@ -20,6 +20,7 @@ namespace Runtime{
     private:
         Engine();
         static std::unique_ptr<Engine> _instance;
+        GLFWwindow* window;
     };
 }
 

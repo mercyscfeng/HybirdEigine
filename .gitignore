@@ -25,10 +25,12 @@
 *.la
 *.a
 *.lib
-
+.vs
 # Executables
 *.exe
 *.out
 *.app
 cmake-build-debug
 .idea
+out
+cmake-build-debug-visual-studio
