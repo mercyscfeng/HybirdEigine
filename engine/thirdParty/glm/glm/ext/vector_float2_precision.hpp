@@ -1,4 +1,4 @@
-/// @ref core
+/// @ref rendering
 /// @file glm/ext/vector_float2_precision.hpp
 
 #pragma once

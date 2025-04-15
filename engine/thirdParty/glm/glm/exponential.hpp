@@ -1,16 +1,16 @@
-/// @ref core
+/// @ref rendering
 /// @file glm/exponential.hpp
 ///
 /// @see <a href="http://www.opengl.org/registry/doc/GLSLangSpec.4.20.8.pdf">GLSL 4.20.8 specification, section 8.2 Exponential Functions</a>
 ///
 /// @defgroup core_func_exponential Exponential functions
-/// @ingroup core
+/// @ingroup rendering
 ///
 /// Provides GLSL exponential functions
 ///
 /// These all operate component-wise. The description is per component.
 ///
-/// Include <glm/exponential.hpp> to use these core features.
+/// Include <glm/exponential.hpp> to use these rendering features.
 
 #pragma once
 

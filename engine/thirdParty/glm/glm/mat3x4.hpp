@@ -1,4 +1,4 @@
-/// @ref core
+/// @ref rendering
 /// @file glm/mat3x4.hpp
 
 #pragma once

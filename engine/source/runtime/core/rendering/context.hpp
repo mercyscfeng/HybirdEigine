@@ -5,12 +5,16 @@
 #include <vector>
 #include <fstream>
 #include <stdexcept>
+#include<optional>
 
-namespace  Runtime {
+namespace  Hybrid {
 	class Context final {
     public:
         void StartUp();
         void Destory();
+        struct QueueFamilyIndices final {
+          std::optional<uint32_t >graphicsQueue;
+        };
         static Context& GetInstance();
         ~Context();
         vk::Instance instance;

@@ -1,4 +1,4 @@
-/// @ref core
+/// @ref rendering
 /// @file glm/ext/vector_bool2.hpp
 
 #pragma once

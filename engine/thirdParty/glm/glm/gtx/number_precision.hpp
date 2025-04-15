@@ -1,7 +1,7 @@
 /// @ref gtx_number_precision
 /// @file glm/gtx/number_precision.hpp
 ///
-/// @see core (dependence)
+/// @see rendering (dependence)
 /// @see gtc_type_precision (dependence)
 /// @see gtc_quaternion (dependence)
 ///

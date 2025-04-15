@@ -1,14 +1,14 @@
-/// @ref core
+/// @ref rendering
 /// @file glm/matrix.hpp
 ///
 /// @see <a href="http://www.opengl.org/registry/doc/GLSLangSpec.4.20.8.pdf">GLSL 4.20.8 specification, section 8.6 Matrix Functions</a>
 ///
 /// @defgroup core_func_matrix Matrix functions
-/// @ingroup core
+/// @ingroup rendering
 ///
 /// Provides GLSL matrix functions.
 ///
-/// Include <glm/matrix.hpp> to use these core features.
+/// Include <glm/matrix.hpp> to use these rendering features.
 
 #pragma once
 

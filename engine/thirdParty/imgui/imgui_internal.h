@@ -1756,7 +1756,7 @@ struct ImGuiContext
     float                   WheelingWindowTimer;
 
     // Item/widgets state and tracking information
-    ImGuiID                 DebugHookIdInfo;                    // Will call core hooks: DebugHookIdInfo() from GetID functions, used by Stack Tool [next HoveredId/ActiveId to not pull in an extra cache-line]
+    ImGuiID                 DebugHookIdInfo;                    // Will call rendering hooks: DebugHookIdInfo() from GetID functions, used by Stack Tool [next HoveredId/ActiveId to not pull in an extra cache-line]
     ImGuiID                 HoveredId;                          // Hovered widget, filled during the frame
     ImGuiID                 HoveredIdPreviousFrame;
     bool                    HoveredIdAllowOverlap;

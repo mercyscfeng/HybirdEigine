@@ -1,4 +1,4 @@
-/// @ref core
+/// @ref rendering
 /// @file glm/ext/matrix_double3x2_precision.hpp
 
 #pragma once

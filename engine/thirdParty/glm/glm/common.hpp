@@ -1,16 +1,16 @@
-/// @ref core
+/// @ref rendering
 /// @file glm/common.hpp
 ///
 /// @see <a href="http://www.opengl.org/registry/doc/GLSLangSpec.4.20.8.pdf">GLSL 4.20.8 specification, section 8.3 Common Functions</a>
 ///
 /// @defgroup core_func_common Common functions
-/// @ingroup core
+/// @ingroup rendering
 ///
 /// Provides GLSL common functions
 ///
 /// These all operate component-wise. The description is per component.
 ///
-/// Include <glm/common.hpp> to use these core features.
+/// Include <glm/common.hpp> to use these rendering features.
 
 #pragma once
 

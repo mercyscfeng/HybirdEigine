@@ -1,7 +1,7 @@
 /// @ref gtx_intersect
 /// @file glm/gtx/intersect.hpp
 ///
-/// @see core (dependence)
+/// @see rendering (dependence)
 /// @see gtx_closest_point (dependence)
 ///
 /// @defgroup gtx_intersect GLM_GTX_intersect

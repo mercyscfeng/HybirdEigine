@@ -1,7 +1,7 @@
 /// @ref gtx_hash
 /// @file glm/gtx/hash.hpp
 ///
-/// @see core (dependence)
+/// @see rendering (dependence)
 ///
 /// @defgroup gtx_hash GLM_GTX_hash
 /// @ingroup gtx

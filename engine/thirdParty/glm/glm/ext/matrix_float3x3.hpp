@@ -1,4 +1,4 @@
-/// @ref core
+/// @ref rendering
 /// @file glm/ext/matrix_float3x3.hpp
 
 #pragma once

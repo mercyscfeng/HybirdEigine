@@ -1,6 +1,6 @@
 /// @ref gtx_hash
 ///
-/// @see core (dependence)
+/// @see rendering (dependence)
 ///
 /// @defgroup gtx_hash GLM_GTX_hash
 /// @ingroup gtx

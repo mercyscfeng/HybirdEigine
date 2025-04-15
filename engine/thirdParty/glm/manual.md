@@ -227,7 +227,7 @@ GLM relies on C++ templates heavily, and may significantly increase compilation 
 
 The following is a code sample using separated core headers and an extension:
 ```cpp
-// Include GLM core features
+// Include GLM rendering features
 #include <glm/vec2.hpp>           // vec2
 #include <glm/vec3.hpp>           // vec3
 #include <glm/mat4x4.hpp>         // mat4

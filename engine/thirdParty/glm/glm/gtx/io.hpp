@@ -2,7 +2,7 @@
 /// @file glm/gtx/io.hpp
 /// @author Jan P Springer (regnirpsj@gmail.com)
 ///
-/// @see core (dependence)
+/// @see rendering (dependence)
 /// @see gtc_matrix_access (dependence)
 /// @see gtc_quaternion (dependence)
 ///

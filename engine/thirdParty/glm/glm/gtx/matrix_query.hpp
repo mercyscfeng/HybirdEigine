@@ -1,7 +1,7 @@
 /// @ref gtx_matrix_query
 /// @file glm/gtx/matrix_query.hpp
 ///
-/// @see core (dependence)
+/// @see rendering (dependence)
 /// @see gtx_vector_query (dependence)
 ///
 /// @defgroup gtx_matrix_query GLM_GTX_matrix_query

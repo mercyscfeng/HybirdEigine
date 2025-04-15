@@ -1,14 +1,14 @@
 /// @ref gtx_integer
 /// @file glm/gtx/integer.hpp
 ///
-/// @see core (dependence)
+/// @see rendering (dependence)
 ///
 /// @defgroup gtx_integer GLM_GTX_integer
 /// @ingroup gtx
 ///
 /// Include <glm/gtx/integer.hpp> to use the features of this extension.
 ///
-/// Add support for integer for core functions
+/// Add support for integer for rendering functions
 
 #pragma once
 

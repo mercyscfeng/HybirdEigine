@@ -1,6 +1,6 @@
 #include "context.hpp"
 
-namespace Runtime{
+namespace Hybrid{
    std::unique_ptr<Context> Context::_instance = nullptr;
    void Context::StartUp() {
        createVkInstance();

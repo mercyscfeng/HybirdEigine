@@ -1,4 +1,4 @@
-/// @ref core
+/// @ref rendering
 
 #include "./compute_vector_relational.hpp"
 

@@ -52,7 +52,7 @@ protected:
         formatted.push_back('\0');
         const char *msg_output = formatted.data();
 
-        // See system/core/liblog/logger_write.c for explanation of return value
+        // See system/rendering/liblog/logger_write.c for explanation of return value
         int ret = __android_log_write(priority, tag_.c_str(), msg_output);
         int retry_count = 0;
         while ((ret == -11 /*EAGAIN*/) && (retry_count < SPDLOG_ANDROID_RETRIES))

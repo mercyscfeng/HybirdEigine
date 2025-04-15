@@ -13,7 +13,7 @@ publish, and distribute this file as you see fit.
 
       http://nothings.org/gamedev/herringbone
 
- The core design is that you use this library offline to generate a
+ The rendering design is that you use this library offline to generate a
  "template" of the tiles you'll create. You then edit those tiles, then
  load the created tile image file back into this library and use it at
  runtime to generate "maps".
