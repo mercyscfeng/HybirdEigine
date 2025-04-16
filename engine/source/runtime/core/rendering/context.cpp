@@ -26,12 +26,42 @@ namespace Hybrid{
 
    }
    void Context::createVkInstance() {
-       std::cout << "create vkinstance " << std::endl;
+       // 应用程序信息
+       vk::ApplicationInfo appInfo(
+           "Hybrid Engine",          // 应用程序名称
+           VK_MAKE_VERSION(1, 0, 0), // 应用程序版本
+           "No Engine",              // 引擎名称
+           VK_MAKE_VERSION(1, 0, 0), // 引擎版本
+           VK_API_VERSION_1_0        // Vulkan API 版本
+       );
 
-       // initialize the VkInstanceCreateInfo structure
-        vk::InstanceCreateInfo inst_info;
-        vk::Result res =  vk::createInstance(&inst_info, nullptr,&instance);
-        std::cout << make_error_code(res) << std::endl;
+       // 获取 GLFW 所需的 Vulkan 扩展
+       uint32_t glfwExtensionCount = 0;
+       const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
+
+       // 实例创建信息
+       vk::InstanceCreateInfo createInfo(
+           vk::InstanceCreateFlags(), // 标志
+           &appInfo,                  // 应用程序信息
+           0, nullptr,                // 启用的验证层（暂时为空）
+           glfwExtensionCount,        // 启用的扩展数量
+           glfwExtensions             // 启用的扩展名称
+       );
+
+       // 打印启用的扩展
+       std::cout << "Enabled Vulkan extensions:" << std::endl;
+       for (uint32_t i = 0; i < glfwExtensionCount; i++) {
+           std::cout << "  " << glfwExtensions[i] << std::endl;
+       }
+
+       // 创建 Vulkan 实例
+       try {
+           instance = vk::createInstance(createInfo);
+           std::cout << "Vulkan instance created successfully!" << std::endl;
+       }
+       catch (const vk::SystemError& err) {
+           throw std::runtime_error("Failed to create Vulkan instance: " + std::string(err.what()));
+       }
    }
 
    void Context::pickupPhysicalDevice() {
@@ -75,32 +105,89 @@ namespace Hybrid{
    }
 
    void Context::createSwapChain() {
+       // 检查物理设备和逻辑设备是否有效
+       if (!phyDevice || !device) {
+           throw std::runtime_error("Physical device or logical device is not initialized");
+       }
+
+       // 检查表面是否有效
+       if (!surface) {
+           throw std::runtime_error("Surface is not initialized");
+       }
+
        // 获取表面能力
        vk::SurfaceCapabilitiesKHR surfaceCapabilities = phyDevice.getSurfaceCapabilitiesKHR(surface);
+       std::cout << "Surface capabilities: " << surfaceCapabilities.minImageCount << " images" << std::endl;
 
        // 获取表面格式
        std::vector<vk::SurfaceFormatKHR> surfaceFormats = phyDevice.getSurfaceFormatsKHR(surface);
+       if (surfaceFormats.empty()) {
+           throw std::runtime_error("No supported surface formats found");
+       }
        vk::SurfaceFormatKHR surfaceFormat = surfaceFormats[0];
+       std::cout << "Surface format: " << vk::to_string(surfaceFormat.format) << std::endl;
+
+       // 设置交换链图像尺寸
+       vk::Extent2D swapChainExtent = surfaceCapabilities.currentExtent;
+       if (swapChainExtent.width == 0 || swapChainExtent.height == 0) {
+           swapChainExtent.width = 800;  // 窗口宽度
+           swapChainExtent.height = 600; // 窗口高度
+       }
+       std::cout << "Swap chain extent: " << swapChainExtent.width << "x" << swapChainExtent.height << std::endl;
+
+       // 设置交换链图像数量
+       uint32_t imageCount = surfaceCapabilities.minImageCount;
+       if (surfaceCapabilities.maxImageCount > 0 && imageCount > surfaceCapabilities.maxImageCount) {
+           imageCount = surfaceCapabilities.maxImageCount;
+       }
+
+       // 获取支持的呈现模式
+       std::vector<vk::PresentModeKHR> presentModes = phyDevice.getSurfacePresentModesKHR(surface);
+       vk::PresentModeKHR presentMode = vk::PresentModeKHR::eFifo; // 默认模式
+       for (const auto& mode : presentModes) {
+           if (mode == vk::PresentModeKHR::eMailbox) {
+               presentMode = mode; // 优先选择 Mailbox 模式
+               break;
+           }
+       }
 
        // 创建交换链
        vk::SwapchainCreateInfoKHR swapChainCreateInfo;
        swapChainCreateInfo.surface = surface;
-       swapChainCreateInfo.minImageCount = surfaceCapabilities.minImageCount;
+       swapChainCreateInfo.minImageCount = imageCount;
        swapChainCreateInfo.imageFormat = surfaceFormat.format;
        swapChainCreateInfo.imageColorSpace = surfaceFormat.colorSpace;
-       swapChainCreateInfo.imageExtent = surfaceCapabilities.currentExtent;
+       swapChainCreateInfo.imageExtent = swapChainExtent;
        swapChainCreateInfo.imageArrayLayers = 1;
        swapChainCreateInfo.imageUsage = vk::ImageUsageFlagBits::eColorAttachment;
        swapChainCreateInfo.imageSharingMode = vk::SharingMode::eExclusive;
        swapChainCreateInfo.preTransform = surfaceCapabilities.currentTransform;
        swapChainCreateInfo.compositeAlpha = vk::CompositeAlphaFlagBitsKHR::eOpaque;
-       swapChainCreateInfo.presentMode = vk::PresentModeKHR::eFifo;
+       swapChainCreateInfo.presentMode = presentMode;
        swapChainCreateInfo.clipped = VK_TRUE;
 
-       swapChain = device.createSwapchainKHR(swapChainCreateInfo);
+       swapChain = vk::SwapchainKHR(); // 显式初始化为空
+       vk::Result result = device.createSwapchainKHR(&swapChainCreateInfo, nullptr, &swapChain);
+       std::cout << swapChain << vk::to_string(result)  << std::endl;
+       if (result != vk::Result::eSuccess) {
+           throw std::runtime_error("Failed to create swap chain: " + vk::to_string(result));
+       }
+       // 检查交换链是否有效
+       //if (!swapChain) {
+       //    throw std::runtime_error("Swap chain is not initialized");
+       //}
 
        // 获取交换链图像
-       swapChainImages = device.getSwapchainImagesKHR(swapChain);
+       /*try {
+           vk::Result result = device.getSwapchainImagesKHR(swapChain, &imageCount, swapChainImages);
+           if (result != vk::Result::eSuccess) {
+               throw std::runtime_error("Failed to get swap chain images: " + vk::to_string(result));
+           }
+           std::cout << "Retrieved " << swapChainImages.size() << " swap chain images" << std::endl;
+       }
+       catch (const vk::SystemError& err) {
+           throw std::runtime_error("Failed to retrieve swap chain images: " + std::string(err.what()));
+       }*/
    }
 
    void Context::createImageViews() {

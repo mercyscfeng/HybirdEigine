@@ -6,6 +6,7 @@
 #include <fstream>
 #include <stdexcept>
 #include<optional>
+#include "GLFW/glfw3.h"
 
 namespace  Hybrid {
 	class Context final {
@@ -43,7 +44,7 @@ namespace  Hybrid {
         vk::Queue graphicsQueue;
         vk::Queue presentQueue;
         
-        vk::SwapchainKHR swapChain;
+        vk::SwapchainKHR swapChain  = vk::SwapchainKHR();
         std::vector<vk::Image> swapChainImages;
         vk::Format swapChainImageFormat;
         vk::Extent2D swapChainExtent;
