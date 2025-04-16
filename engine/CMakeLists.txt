@@ -37,7 +37,7 @@ endif ()
 set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/${BUILD_TARGET})
 
 set(VULKAN_INCLUDE_DIR ${THIRD_PARTY}/vulkanSDK/include)
-set(VULKAN_LIB ${THIRD_PARTY}/vulkanSDK/lib/${BUILD_TARGET}/libvulkan.1.dylib)
+set(VULKAN_LIB ${THIRD_PARTY}/vulkanSDK/lib/${BUILD_TARGET}/vulkan-1.lib)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/source ${VULKAN_INCLUDE_DIR})
 
 

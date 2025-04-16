@@ -21,7 +21,6 @@ namespace Hybrid{
   void Rendering::Startup()
   {
       Context::GetInstance().StartUp();
-      createWindow();
   }
   void Rendering::Destroy() {
       // 销毁窗口和终止 GLFW
@@ -32,6 +31,7 @@ namespace Hybrid{
       if (!glfwInit()) {
           return -1;
       }
+      std::cout << "create window " << std::endl;
       // 设置 GLFW 不使用 OpenGL
       glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 

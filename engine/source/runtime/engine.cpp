@@ -7,6 +7,7 @@ namespace Hybrid{
     std::unique_ptr<Engine> Engine::_instance = nullptr;
     void Engine::StartUp() {
         Rendering::GetInstance().Startup();
+        Rendering::GetInstance().createWindow();
     }
     void Engine::Destory() {
         _instance.reset();
@@ -26,7 +27,7 @@ namespace Hybrid{
 
     void Engine::Tick() 
     {
-        Rendering::GetInstance().createWindow();
+
     }
  
 }
