@@ -88,16 +88,17 @@ namespace Hybrid{
           glfwTerminate();
           return -1;
       }
-      Context::GetInstance().surface = surface;
+      Context::GetInstance().surface = vk::SurfaceKHR(surface);
       // 初始化 Vulkan 设备、交换链等
       Context::GetInstance().createDevice();
       Context::GetInstance().createSwapChain();
-      //Context::GetInstance().createImageViews();
-      //Context::GetInstance().createRenderPass();
-      //Context::GetInstance().createGraphicsPipeline();
-      //Context::GetInstance().createFramebuffers();
-     // Context::GetInstance().createCommandPool();
-      //Context::GetInstance().createCommandBuffers();
+      Context::GetInstance().createImageViews();
+      Context::GetInstance().createRenderPass();
+
+      Context::GetInstance().createGraphicsPipeline();
+//      Context::GetInstance().createFramebuffers();
+//      Context::GetInstance().createCommandPool();
+//      Context::GetInstance().createCommandBuffers();
       // 使用窗口上下文
       //glfwMakeContextCurrent(window);
 

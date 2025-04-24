@@ -5,7 +5,7 @@ namespace Hybrid{
    void Context::StartUp() {
        createVkInstance();
        pickupPhysicalDevice();
-       createDevice();
+
    }
 
    void Context::Destory() {
@@ -26,35 +26,35 @@ namespace Hybrid{
 
    }
    void Context::createVkInstance() {
-       // Ó¦ÓÃ³ÌÐòÐÅÏ¢
+       // Ó¦ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
        vk::ApplicationInfo appInfo(
-           "Hybrid Engine",          // Ó¦ÓÃ³ÌÐòÃû³Æ
-           VK_MAKE_VERSION(1, 0, 0), // Ó¦ÓÃ³ÌÐò°æ±¾
-           "No Engine",              // ÒýÇæÃû³Æ
-           VK_MAKE_VERSION(1, 0, 0), // ÒýÇæ°æ±¾
-           VK_API_VERSION_1_0        // Vulkan API °æ±¾
+           "Hybrid Engine",          // Ó¦ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+           VK_MAKE_VERSION(1, 0, 0), // Ó¦ï¿½Ã³ï¿½ï¿½ï¿½æ±¾
+           "No Engine",              // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+           VK_MAKE_VERSION(1, 0, 0), // ï¿½ï¿½ï¿½ï¿½æ±¾
+           VK_API_VERSION_1_0        // Vulkan API ï¿½æ±¾
        );
 
-       // »ñÈ¡ GLFW ËùÐèµÄ Vulkan À©Õ¹
+       // ï¿½ï¿½È¡ GLFW ï¿½ï¿½ï¿½ï¿½ï¿½ Vulkan ï¿½ï¿½Õ¹
        uint32_t glfwExtensionCount = 0;
        const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
-       // ÊµÀý´´½¨ÐÅÏ¢
+       // Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
        vk::InstanceCreateInfo createInfo(
-           vk::InstanceCreateFlags(), // ±êÖ¾
-           &appInfo,                  // Ó¦ÓÃ³ÌÐòÐÅÏ¢
-           0, nullptr,                // ÆôÓÃµÄÑéÖ¤²ã£¨ÔÝÊ±Îª¿Õ£©
-           glfwExtensionCount,        // ÆôÓÃµÄÀ©Õ¹ÊýÁ¿
-           glfwExtensions             // ÆôÓÃµÄÀ©Õ¹Ãû³Æ
+           vk::InstanceCreateFlags(), // ï¿½ï¿½Ö¾
+           &appInfo,                  // Ó¦ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+           0, nullptr,                // ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Ö¤ï¿½ã£¨ï¿½ï¿½Ê±Îªï¿½Õ£ï¿½
+           glfwExtensionCount,        // ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Õ¹ï¿½ï¿½ï¿½ï¿½
+           glfwExtensions             // ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Õ¹ï¿½ï¿½ï¿½ï¿½
        );
 
-       // ´òÓ¡ÆôÓÃµÄÀ©Õ¹
+       // ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½Õ¹
        std::cout << "Enabled Vulkan extensions:" << std::endl;
        for (uint32_t i = 0; i < glfwExtensionCount; i++) {
            std::cout << "  " << glfwExtensions[i] << std::endl;
        }
 
-       // ´´½¨ Vulkan ÊµÀý
+       // ï¿½ï¿½ï¿½ï¿½ Vulkan Êµï¿½ï¿½
        try {
            instance = vk::createInstance(createInfo);
            std::cout << "Vulkan instance created successfully!" << std::endl;
@@ -73,53 +73,69 @@ namespace Hybrid{
        phyDevice = devices[0];
    }
 
-   void Context::createDevice() {
-       // »ñÈ¡¶ÓÁÐ×åÊôÐÔ
-       auto queueFamilyProperties = phyDevice.getQueueFamilyProperties();
+    void Context::createDevice() {
+        // èŽ·å–æ‰€æœ‰é˜Ÿåˆ—æ—å±žæ€§
+        auto queueFamilyProperties = phyDevice.getQueueFamilyProperties();
 
-       // ²éÕÒÖ§³ÖÍ¼ÐÎ²Ù×÷µÄ¶ÓÁÐ×å
-       for (uint32_t i = 0; i < queueFamilyProperties.size(); i++) {
-           if (queueFamilyProperties[i].queueFlags & vk::QueueFlagBits::eGraphics) {
-               graphicsQueueFamilyIndex = i;
-               break;
-           }
-       }
+        // æ‰¾åˆ°åŒæ—¶æ”¯æŒ graphics å’Œ present çš„é˜Ÿåˆ—æ—
+        int graphicsPresentQueueFamilyIndex = -1;
+        for (uint32_t i = 0; i < queueFamilyProperties.size(); i++) {
+            bool graphics = (queueFamilyProperties[i].queueFlags & vk::QueueFlagBits::eGraphics) != vk::QueueFlags();
+            VkBool32 present = false;
+            phyDevice.getSurfaceSupportKHR(i, surface, &present);
 
-       // ÉèÖÃ¶ÓÁÐ´´½¨ÐÅÏ¢
-       float queuePriority = 1.0f;
-       vk::DeviceQueueCreateInfo queueCreateInfo;
-       queueCreateInfo.queueFamilyIndex = graphicsQueueFamilyIndex;
-       queueCreateInfo.queueCount = 1;
-       queueCreateInfo.pQueuePriorities = &queuePriority;
+            std::cout << "Queue family " << i << ": graphics=" << graphics << ", present=" << present << std::endl;
 
-       // ÉèÖÃÉè±¸´´½¨ÐÅÏ¢
-       vk::DeviceCreateInfo deviceCreateInfo;
-       deviceCreateInfo.queueCreateInfoCount = 1;
-       deviceCreateInfo.pQueueCreateInfos = &queueCreateInfo;
+            if (graphics && present) {
+                graphicsPresentQueueFamilyIndex = i;
+                break;
+            }
+        }
 
-       // ´´½¨Âß¼­Éè±¸
-       device = phyDevice.createDevice(deviceCreateInfo);
+        if (graphicsPresentQueueFamilyIndex == -1) {
+            throw std::runtime_error("No queue family supports both graphics and present!");
+        }
 
-       // »ñÈ¡Í¼ÐÎ¶ÓÁÐ
-       graphicsQueue = device.getQueue(graphicsQueueFamilyIndex, 0);
-   }
+        graphicsQueueFamilyIndex = graphicsPresentQueueFamilyIndex;
+
+        // è®¾ç½®é˜Ÿåˆ—åˆ›å»ºä¿¡æ¯
+        float queuePriority = 1.0f;
+        vk::DeviceQueueCreateInfo queueCreateInfo;
+        queueCreateInfo.queueFamilyIndex = graphicsQueueFamilyIndex;
+        queueCreateInfo.queueCount = 1;
+        queueCreateInfo.pQueuePriorities = &queuePriority;
+
+        // è®¾å¤‡åˆ›å»ºä¿¡æ¯
+        vk::DeviceCreateInfo deviceCreateInfo;
+        const char* deviceExtensions[] = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+        deviceCreateInfo.queueCreateInfoCount = 1;
+        deviceCreateInfo.pQueueCreateInfos = &queueCreateInfo;
+        deviceCreateInfo.enabledExtensionCount = 1;
+        deviceCreateInfo.ppEnabledExtensionNames = deviceExtensions;
+
+        // åˆ›å»ºé€»è¾‘è®¾å¤‡
+        device = phyDevice.createDevice(deviceCreateInfo);
+
+        // èŽ·å–é˜Ÿåˆ—
+        graphicsQueue = device.getQueue(graphicsQueueFamilyIndex, 0);
+    }
 
    void Context::createSwapChain() {
-       // ¼ì²éÎïÀíÉè±¸ºÍÂß¼­Éè±¸ÊÇ·ñÓÐÐ§
+       // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è±¸ï¿½ï¿½ï¿½ß¼ï¿½ï¿½è±¸ï¿½Ç·ï¿½ï¿½ï¿½Ð§
        if (!phyDevice || !device) {
            throw std::runtime_error("Physical device or logical device is not initialized");
        }
 
-       // ¼ì²é±íÃæÊÇ·ñÓÐÐ§
+       // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ð§
        if (!surface) {
            throw std::runtime_error("Surface is not initialized");
        }
 
-       // »ñÈ¡±íÃæÄÜÁ¦
+       // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
        vk::SurfaceCapabilitiesKHR surfaceCapabilities = phyDevice.getSurfaceCapabilitiesKHR(surface);
        std::cout << "Surface capabilities: " << surfaceCapabilities.minImageCount << " images" << std::endl;
 
-       // »ñÈ¡±íÃæ¸ñÊ½
+       // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ê½
        std::vector<vk::SurfaceFormatKHR> surfaceFormats = phyDevice.getSurfaceFormatsKHR(surface);
        if (surfaceFormats.empty()) {
            throw std::runtime_error("No supported surface formats found");
@@ -127,31 +143,31 @@ namespace Hybrid{
        vk::SurfaceFormatKHR surfaceFormat = surfaceFormats[0];
        std::cout << "Surface format: " << vk::to_string(surfaceFormat.format) << std::endl;
 
-       // ÉèÖÃ½»»»Á´Í¼Ïñ³ß´ç
+       // ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ß´ï¿½
        vk::Extent2D swapChainExtent = surfaceCapabilities.currentExtent;
        if (swapChainExtent.width == 0 || swapChainExtent.height == 0) {
-           swapChainExtent.width = 800;  // ´°¿Ú¿í¶È
-           swapChainExtent.height = 600; // ´°¿Ú¸ß¶È
+           swapChainExtent.width = 800;  // ï¿½ï¿½ï¿½Ú¿ï¿½ï¿½
+           swapChainExtent.height = 600; // ï¿½ï¿½ï¿½Ú¸ß¶ï¿½
        }
        std::cout << "Swap chain extent: " << swapChainExtent.width << "x" << swapChainExtent.height << std::endl;
 
-       // ÉèÖÃ½»»»Á´Í¼ÏñÊýÁ¿
+       // ï¿½ï¿½ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
        uint32_t imageCount = surfaceCapabilities.minImageCount;
        if (surfaceCapabilities.maxImageCount > 0 && imageCount > surfaceCapabilities.maxImageCount) {
            imageCount = surfaceCapabilities.maxImageCount;
        }
 
-       // »ñÈ¡Ö§³ÖµÄ³ÊÏÖÄ£Ê½
+       // ï¿½ï¿½È¡Ö§ï¿½ÖµÄ³ï¿½ï¿½ï¿½Ä£Ê½
        std::vector<vk::PresentModeKHR> presentModes = phyDevice.getSurfacePresentModesKHR(surface);
-       vk::PresentModeKHR presentMode = vk::PresentModeKHR::eFifo; // Ä¬ÈÏÄ£Ê½
+       vk::PresentModeKHR presentMode = vk::PresentModeKHR::eFifo; // Ä¬ï¿½ï¿½Ä£Ê½
        for (const auto& mode : presentModes) {
            if (mode == vk::PresentModeKHR::eMailbox) {
-               presentMode = mode; // ÓÅÏÈÑ¡Ôñ Mailbox Ä£Ê½
+               presentMode = mode; // ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ Mailbox Ä£Ê½
                break;
            }
        }
 
-       // ´´½¨½»»»Á´
+       // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
        vk::SwapchainCreateInfoKHR swapChainCreateInfo;
        swapChainCreateInfo.surface = surface;
        swapChainCreateInfo.minImageCount = imageCount;
@@ -166,28 +182,9 @@ namespace Hybrid{
        swapChainCreateInfo.presentMode = presentMode;
        swapChainCreateInfo.clipped = VK_TRUE;
 
-       swapChain = vk::SwapchainKHR(); // ÏÔÊ½³õÊ¼»¯Îª¿Õ
-       vk::Result result = device.createSwapchainKHR(&swapChainCreateInfo, nullptr, &swapChain);
-       std::cout << swapChain << vk::to_string(result)  << std::endl;
-       if (result != vk::Result::eSuccess) {
-           throw std::runtime_error("Failed to create swap chain: " + vk::to_string(result));
-       }
-       // ¼ì²é½»»»Á´ÊÇ·ñÓÐÐ§
-       //if (!swapChain) {
-       //    throw std::runtime_error("Swap chain is not initialized");
-       //}
-
-       // »ñÈ¡½»»»Á´Í¼Ïñ
-       /*try {
-           vk::Result result = device.getSwapchainImagesKHR(swapChain, &imageCount, swapChainImages);
-           if (result != vk::Result::eSuccess) {
-               throw std::runtime_error("Failed to get swap chain images: " + vk::to_string(result));
-           }
-           std::cout << "Retrieved " << swapChainImages.size() << " swap chain images" << std::endl;
-       }
-       catch (const vk::SystemError& err) {
-           throw std::runtime_error("Failed to retrieve swap chain images: " + std::string(err.what()));
-       }*/
+       swapChain = device.createSwapchainKHR(swapChainCreateInfo);
+       std::cout << "Swapchain handle: " << swapChain << std::endl;
+       swapChainImages = device.getSwapchainImagesKHR(swapChain);
    }
 
    void Context::createImageViews() {
@@ -254,31 +251,36 @@ namespace Hybrid{
    }
 
    std::vector<char>  Context::readFile(const std::string& filename) {
+       std::cout <<"read file1 " << std::endl;
        std::ifstream file(filename, std::ios::ate | std::ios::binary);
-
+       std::cout <<"read file2 " << std::endl;
        if (!file.is_open()) {
            throw std::runtime_error("Failed to open file: " + filename);
        }
-
+       std::cout <<"read file3 " << std::endl;
        size_t fileSize = static_cast<size_t>(file.tellg());
        std::vector<char> buffer(fileSize);
-
+       std::cout <<"read file4 " << std::endl;
        file.seekg(0);
        file.read(buffer.data(), fileSize);
-
+       std::cout <<"read file5 " << std::endl;
        file.close();
 
        return buffer;
    }
 
    void Context::createGraphicsPipeline() {
-       // ¼ÓÔØ×ÅÉ«Æ÷´úÂë
-       auto vertShaderCode = readFile("../../../shader/vert.spv");
-       auto fragShaderCode = readFile("../../../shader/frag.spv");
-
-       vk::ShaderModule vertShaderModule = createShaderModule(vertShaderCode);
-       vk::ShaderModule fragShaderModule = createShaderModule(fragShaderCode);
-
+       auto vertShaderCode = readFile("D:\\HybirdEigen\\engine\\shader\\vert.spv");
+       auto fragShaderCode = readFile("D:\\HybirdEigen\\engine\\shader\\frag.spv");
+       vk::ShaderModule fragShaderModule;
+       vk::ShaderModule vertShaderModule;
+       try{
+           vertShaderModule = createShaderModule(vertShaderCode);
+           fragShaderModule = createShaderModule(fragShaderCode);
+       }catch(std::exception& e) {
+           std::cout << e.what() << std::endl;
+           return ;
+       }
        vk::PipelineShaderStageCreateInfo vertShaderStageInfo;
        vertShaderStageInfo.stage = vk::ShaderStageFlagBits::eVertex;
        vertShaderStageInfo.module = vertShaderModule;
@@ -291,15 +293,12 @@ namespace Hybrid{
 
        vk::PipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
 
-       // ¶¥µãÊäÈë
        vk::PipelineVertexInputStateCreateInfo vertexInputInfo;
 
-       // ÊäÈë×°Åä
        vk::PipelineInputAssemblyStateCreateInfo inputAssembly;
        inputAssembly.topology = vk::PrimitiveTopology::eTriangleList;
        inputAssembly.primitiveRestartEnable = VK_FALSE;
 
-       // ÊÓ¿ÚºÍ²Ã¼ô
        vk::Viewport viewport;
        viewport.x = 0.0f;
        viewport.y = 0.0f;
@@ -318,54 +317,54 @@ namespace Hybrid{
        viewportState.scissorCount = 1;
        viewportState.pScissors = &scissor;
 
-       // ¹âÕ¤»¯
-       vk::PipelineRasterizationStateCreateInfo rasterizer;
-       rasterizer.depthClampEnable = VK_FALSE;
-       rasterizer.rasterizerDiscardEnable = VK_FALSE;
-       rasterizer.polygonMode = vk::PolygonMode::eFill;
-       rasterizer.lineWidth = 1.0f;
-       rasterizer.cullMode = vk::CullModeFlagBits::eBack;
-       rasterizer.frontFace = vk::FrontFace::eClockwise;
-       rasterizer.depthBiasEnable = VK_FALSE;
-
-       // ¶àÖØ²ÉÑù
-       vk::PipelineMultisampleStateCreateInfo multisampling;
-       multisampling.sampleShadingEnable = VK_FALSE;
-       multisampling.rasterizationSamples = vk::SampleCountFlagBits::e1;
-
-       // ÑÕÉ«»ìºÏ
-       vk::PipelineColorBlendAttachmentState colorBlendAttachment;
-       colorBlendAttachment.colorWriteMask = vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA;
-       colorBlendAttachment.blendEnable = VK_FALSE;
-
-       vk::PipelineColorBlendStateCreateInfo colorBlending;
-       colorBlending.logicOpEnable = VK_FALSE;
-       colorBlending.attachmentCount = 1;
-       colorBlending.pAttachments = &colorBlendAttachment;
-
-       // ¹ÜÏß²¼¾Ö
-       vk::PipelineLayoutCreateInfo pipelineLayoutInfo;
-       pipelineLayout = device.createPipelineLayout(pipelineLayoutInfo);
-
-       // ´´½¨Í¼ÐÎ¹ÜÏß
-       vk::GraphicsPipelineCreateInfo pipelineInfo;
-       pipelineInfo.stageCount = 2;
-       pipelineInfo.pStages = shaderStages;
-       pipelineInfo.pVertexInputState = &vertexInputInfo;
-       pipelineInfo.pInputAssemblyState = &inputAssembly;
-       pipelineInfo.pViewportState = &viewportState;
-       pipelineInfo.pRasterizationState = &rasterizer;
-       pipelineInfo.pMultisampleState = &multisampling;
-       pipelineInfo.pColorBlendState = &colorBlending;
-       pipelineInfo.layout = pipelineLayout;
-       pipelineInfo.renderPass = renderPass;
-       pipelineInfo.subpass = 0;
-
-       graphicsPipeline = device.createGraphicsPipeline(nullptr, pipelineInfo).value;
-
-       // Ïú»Ù×ÅÉ«Æ÷Ä£¿é
-       device.destroyShaderModule(vertShaderModule);
-       device.destroyShaderModule(fragShaderModule);
+//       // ï¿½ï¿½Õ¤ï¿½ï¿½
+//       vk::PipelineRasterizationStateCreateInfo rasterizer;
+//       rasterizer.depthClampEnable = VK_FALSE;
+//       rasterizer.rasterizerDiscardEnable = VK_FALSE;
+//       rasterizer.polygonMode = vk::PolygonMode::eFill;
+//       rasterizer.lineWidth = 1.0f;
+//       rasterizer.cullMode = vk::CullModeFlagBits::eBack;
+//       rasterizer.frontFace = vk::FrontFace::eClockwise;
+//       rasterizer.depthBiasEnable = VK_FALSE;
+//
+//       // ï¿½ï¿½ï¿½Ø²ï¿½ï¿½ï¿½
+//       vk::PipelineMultisampleStateCreateInfo multisampling;
+//       multisampling.sampleShadingEnable = VK_FALSE;
+//       multisampling.rasterizationSamples = vk::SampleCountFlagBits::e1;
+//
+//       // ï¿½ï¿½É«ï¿½ï¿½ï¿½
+//       vk::PipelineColorBlendAttachmentState colorBlendAttachment;
+//       colorBlendAttachment.colorWriteMask = vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA;
+//       colorBlendAttachment.blendEnable = VK_FALSE;
+//
+//       vk::PipelineColorBlendStateCreateInfo colorBlending;
+//       colorBlending.logicOpEnable = VK_FALSE;
+//       colorBlending.attachmentCount = 1;
+//       colorBlending.pAttachments = &colorBlendAttachment;
+//
+//       // ï¿½ï¿½ï¿½ß²ï¿½ï¿½ï¿½
+//       vk::PipelineLayoutCreateInfo pipelineLayoutInfo;
+//       pipelineLayout = device.createPipelineLayout(pipelineLayoutInfo);
+//
+//       // ï¿½ï¿½ï¿½ï¿½Í¼ï¿½Î¹ï¿½ï¿½ï¿½
+//       vk::GraphicsPipelineCreateInfo pipelineInfo;
+//       pipelineInfo.stageCount = 2;
+//       pipelineInfo.pStages = shaderStages;
+//       pipelineInfo.pVertexInputState = &vertexInputInfo;
+//       pipelineInfo.pInputAssemblyState = &inputAssembly;
+//       pipelineInfo.pViewportState = &viewportState;
+//       pipelineInfo.pRasterizationState = &rasterizer;
+//       pipelineInfo.pMultisampleState = &multisampling;
+//       pipelineInfo.pColorBlendState = &colorBlending;
+//       pipelineInfo.layout = pipelineLayout;
+//       pipelineInfo.renderPass = renderPass;
+//       pipelineInfo.subpass = 0;
+//
+//       graphicsPipeline = device.createGraphicsPipeline(nullptr, pipelineInfo).value;
+//
+//       // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½Ä£ï¿½ï¿½
+//       device.destroyShaderModule(vertShaderModule);
+//       device.destroyShaderModule(fragShaderModule);
    }
 
 
