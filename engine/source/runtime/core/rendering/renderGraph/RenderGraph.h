@@ -1,14 +1,11 @@
-//
-// Created by Administrator on 2025/4/26.
-//
+#pragma once
 
-#ifndef HYBIRDENGINE_RENDERGRAPH_H
-#define HYBIRDENGINE_RENDERGRAPH_H
-
-
-class RenderGraph {
-
-};
+namespace Hybird{
+    class RenderGraph {
+    public:
+//        void AddPass(const )
+    };
+}
 
 
-#endif //HYBIRDENGINE_RENDERGRAPH_H
+

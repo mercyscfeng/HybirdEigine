@@ -96,11 +96,11 @@ namespace Hybrid{
       Context::GetInstance().createRenderPass();
 
       Context::GetInstance().createGraphicsPipeline();
-//      Context::GetInstance().createFramebuffers();
-//      Context::GetInstance().createCommandPool();
-//      Context::GetInstance().createCommandBuffers();
+      Context::GetInstance().createFramebuffers();
+      Context::GetInstance().createCommandPool();
+      Context::GetInstance().createCommandBuffers();
       // 使用窗口上下文
-      //glfwMakeContextCurrent(window);
+      glfwMakeContextCurrent(window);
 
       while (!glfwWindowShouldClose(window)) {
           if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -108,12 +108,13 @@ namespace Hybrid{
           }
           //vulkan 代码
           // 绘制帧
-          //Context::GetInstance().drawFrame();
-          //glfwSwapBuffers(window);
+          Context::GetInstance().drawFrame();
+          glfwSwapBuffers(window);
           glfwPollEvents();
       }
 
       // 销毁窗口和终止 GLFW
+      Context::GetInstance().cleanup();
       glfwDestroyWindow(window);
       glfwTerminate();
       return 0;

@@ -1,16 +1,13 @@
-//
-// Created by Administrator on 2025/4/26.
-//
-
-#ifndef HYBIRDENGINE_RENDERRESOURCEMANAGER_H
-#define HYBIRDENGINE_RENDERRESOURCEMANAGER_H
-
-
-
-class RenderResourceManager {
-
-};
+#pragma once
+#include <iostream>
+#include "RenderResource.h"
+namespace Hybird{
+    class RenderResourceManager {
+    public:
+//        RenderResource& CreateResource(const std::string& name, RenderResource)
+    };
+}
 
 
 
-#endif //HYBIRDENGINE_RENDERRESOURCEMANAGER_H
+

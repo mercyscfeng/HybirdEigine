@@ -27,6 +27,9 @@ namespace Hybrid{
    }
    void Context::createVkInstance() {
        // Ӧ�ó�����Ϣ
+       const std::vector<const char*> validationLayers = {
+               "VK_LAYER_KHRONOS_validation"
+       };
        vk::ApplicationInfo appInfo(
            "Hybrid Engine",          // Ӧ�ó�������
            VK_MAKE_VERSION(1, 0, 0), // Ӧ�ó���汾
@@ -39,14 +42,12 @@ namespace Hybrid{
        uint32_t glfwExtensionCount = 0;
        const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
-       // ʵ��������Ϣ
-       vk::InstanceCreateInfo createInfo(
-           vk::InstanceCreateFlags(), // ��־
-           &appInfo,                  // Ӧ�ó�����Ϣ
-           0, nullptr,                // ���õ���֤�㣨��ʱΪ�գ�
-           glfwExtensionCount,        // ���õ���չ����
-           glfwExtensions             // ���õ���չ����
-       );
+       vk::InstanceCreateInfo createInfo;
+       createInfo.pApplicationInfo = &appInfo;
+       createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+       createInfo.ppEnabledLayerNames = validationLayers.data();
+       createInfo.enabledExtensionCount = glfwExtensionCount;
+       createInfo.ppEnabledExtensionNames = glfwExtensions;
 
        // ��ӡ���õ���չ
        std::cout << "Enabled Vulkan extensions:" << std::endl;
@@ -115,9 +116,15 @@ namespace Hybrid{
 
         // 创建逻辑设备
         device = phyDevice.createDevice(deviceCreateInfo);
-
+        presentQueue = device.getQueue(graphicsQueueFamilyIndex, 0);
         // 获取队列
         graphicsQueue = device.getQueue(graphicsQueueFamilyIndex, 0);
+        //创建两组信号量
+        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+            imageAvailableSemaphores.push_back(device.createSemaphore({}));
+            renderFinishedSemaphores.push_back(device.createSemaphore({}));
+            inFlightFences.push_back(device.createFence({ vk::FenceCreateFlagBits::eSignaled }));
+        }
     }
 
    void Context::createSwapChain() {
@@ -142,12 +149,12 @@ namespace Hybrid{
        }
        vk::SurfaceFormatKHR surfaceFormat = surfaceFormats[0];
        std::cout << "Surface format: " << vk::to_string(surfaceFormat.format) << std::endl;
-
+       swapChainImageFormat = surfaceFormat.format;
        // ���ý�����ͼ��ߴ�
-       vk::Extent2D swapChainExtent = surfaceCapabilities.currentExtent;
+       swapChainExtent = surfaceCapabilities.currentExtent;
        if (swapChainExtent.width == 0 || swapChainExtent.height == 0) {
-           swapChainExtent.width = 800;  // ���ڿ��
-           swapChainExtent.height = 600; // ���ڸ߶�
+           swapChainExtent.width = 800;
+           swapChainExtent.height = 600;
        }
        std::cout << "Swap chain extent: " << swapChainExtent.width << "x" << swapChainExtent.height << std::endl;
 
@@ -302,8 +309,8 @@ namespace Hybrid{
        vk::Viewport viewport;
        viewport.x = 0.0f;
        viewport.y = 0.0f;
-       viewport.width = (float)swapChainExtent.width;
-       viewport.height = (float)swapChainExtent.height;
+       viewport.width = 800.0f;  // 例如 800
+       viewport.height = 600.0f; // 例如 600
        viewport.minDepth = 0.0f;
        viewport.maxDepth = 1.0f;
 
@@ -318,53 +325,53 @@ namespace Hybrid{
        viewportState.pScissors = &scissor;
 
 //       // ��դ��
-//       vk::PipelineRasterizationStateCreateInfo rasterizer;
-//       rasterizer.depthClampEnable = VK_FALSE;
-//       rasterizer.rasterizerDiscardEnable = VK_FALSE;
-//       rasterizer.polygonMode = vk::PolygonMode::eFill;
-//       rasterizer.lineWidth = 1.0f;
-//       rasterizer.cullMode = vk::CullModeFlagBits::eBack;
-//       rasterizer.frontFace = vk::FrontFace::eClockwise;
-//       rasterizer.depthBiasEnable = VK_FALSE;
+       vk::PipelineRasterizationStateCreateInfo rasterizer;
+       rasterizer.depthClampEnable = VK_FALSE;
+       rasterizer.rasterizerDiscardEnable = VK_FALSE;
+       rasterizer.polygonMode = vk::PolygonMode::eFill;
+       rasterizer.lineWidth = 1.0f;
+       rasterizer.cullMode = vk::CullModeFlagBits::eBack;
+       rasterizer.frontFace = vk::FrontFace::eClockwise;
+       rasterizer.depthBiasEnable = VK_FALSE;
 //
 //       // ���ز���
-//       vk::PipelineMultisampleStateCreateInfo multisampling;
-//       multisampling.sampleShadingEnable = VK_FALSE;
-//       multisampling.rasterizationSamples = vk::SampleCountFlagBits::e1;
+       vk::PipelineMultisampleStateCreateInfo multisampling;
+       multisampling.sampleShadingEnable = VK_FALSE;
+       multisampling.rasterizationSamples = vk::SampleCountFlagBits::e1;
 //
 //       // ��ɫ���
-//       vk::PipelineColorBlendAttachmentState colorBlendAttachment;
-//       colorBlendAttachment.colorWriteMask = vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA;
-//       colorBlendAttachment.blendEnable = VK_FALSE;
-//
-//       vk::PipelineColorBlendStateCreateInfo colorBlending;
-//       colorBlending.logicOpEnable = VK_FALSE;
-//       colorBlending.attachmentCount = 1;
-//       colorBlending.pAttachments = &colorBlendAttachment;
+       vk::PipelineColorBlendAttachmentState colorBlendAttachment;
+       colorBlendAttachment.colorWriteMask = vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA;
+       colorBlendAttachment.blendEnable = VK_FALSE;
+
+       vk::PipelineColorBlendStateCreateInfo colorBlending;
+       colorBlending.logicOpEnable = VK_FALSE;
+       colorBlending.attachmentCount = 1;
+       colorBlending.pAttachments = &colorBlendAttachment;
 //
 //       // ���߲���
-//       vk::PipelineLayoutCreateInfo pipelineLayoutInfo;
-//       pipelineLayout = device.createPipelineLayout(pipelineLayoutInfo);
+       vk::PipelineLayoutCreateInfo pipelineLayoutInfo;
+       pipelineLayout = device.createPipelineLayout(pipelineLayoutInfo);
 //
 //       // ����ͼ�ι���
-//       vk::GraphicsPipelineCreateInfo pipelineInfo;
-//       pipelineInfo.stageCount = 2;
-//       pipelineInfo.pStages = shaderStages;
-//       pipelineInfo.pVertexInputState = &vertexInputInfo;
-//       pipelineInfo.pInputAssemblyState = &inputAssembly;
-//       pipelineInfo.pViewportState = &viewportState;
-//       pipelineInfo.pRasterizationState = &rasterizer;
-//       pipelineInfo.pMultisampleState = &multisampling;
-//       pipelineInfo.pColorBlendState = &colorBlending;
-//       pipelineInfo.layout = pipelineLayout;
-//       pipelineInfo.renderPass = renderPass;
-//       pipelineInfo.subpass = 0;
+       vk::GraphicsPipelineCreateInfo pipelineInfo;
+       pipelineInfo.stageCount = 2;
+       pipelineInfo.pStages = shaderStages;
+       pipelineInfo.pVertexInputState = &vertexInputInfo;
+       pipelineInfo.pInputAssemblyState = &inputAssembly;
+       pipelineInfo.pViewportState = &viewportState;
+       pipelineInfo.pRasterizationState = &rasterizer;
+       pipelineInfo.pMultisampleState = &multisampling;
+       pipelineInfo.pColorBlendState = &colorBlending;
+       pipelineInfo.layout = pipelineLayout;
+       pipelineInfo.renderPass = renderPass;
+       pipelineInfo.subpass = 0;
 //
-//       graphicsPipeline = device.createGraphicsPipeline(nullptr, pipelineInfo).value;
+       graphicsPipeline = device.createGraphicsPipeline(nullptr, pipelineInfo).value;
 //
 //       // ������ɫ��ģ��
-//       device.destroyShaderModule(vertShaderModule);
-//       device.destroyShaderModule(fragShaderModule);
+       device.destroyShaderModule(vertShaderModule);
+       device.destroyShaderModule(fragShaderModule);
    }
 
 
@@ -379,8 +386,8 @@ namespace Hybrid{
            framebufferInfo.renderPass = renderPass;
            framebufferInfo.attachmentCount = 1;
            framebufferInfo.pAttachments = attachments;
-           framebufferInfo.width = swapChainExtent.width;
-           framebufferInfo.height = swapChainExtent.height;
+           framebufferInfo.width = 800;
+           framebufferInfo.height = 600;
            framebufferInfo.layers = 1;
 
            swapChainFramebuffers[i] = device.createFramebuffer(framebufferInfo);
@@ -429,56 +436,66 @@ namespace Hybrid{
    }
 
    void Context::drawFrame() {
-       vk::SemaphoreCreateInfo semaphoreInfo;
-       vk::FenceCreateInfo fenceInfo;
-       vk::Semaphore imageAvailableSemaphore = device.createSemaphore(semaphoreInfo);
-       vk::Semaphore renderFinishedSemaphore = device.createSemaphore(semaphoreInfo);
-       vk::Fence inFlightFence = device.createFence(fenceInfo);
+       device.waitForFences(inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+       device.resetFences(inFlightFences[currentFrame]);
 
-       uint32_t imageIndex = device.acquireNextImageKHR(swapChain, UINT64_MAX, imageAvailableSemaphore, nullptr).value;
+       auto acquireResult = device.acquireNextImageKHR(swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], nullptr);
+       if (acquireResult.result == vk::Result::eErrorOutOfDateKHR) {
+           // 需要重建 swapchain
+           return;
+       }
+       uint32_t imageIndex = acquireResult.value;
 
        vk::SubmitInfo submitInfo;
        vk::PipelineStageFlags waitStages[] = { vk::PipelineStageFlagBits::eColorAttachmentOutput };
        submitInfo.waitSemaphoreCount = 1;
-       submitInfo.pWaitSemaphores = &imageAvailableSemaphore;
+       submitInfo.pWaitSemaphores = &imageAvailableSemaphores[currentFrame];
        submitInfo.pWaitDstStageMask = waitStages;
        submitInfo.commandBufferCount = 1;
        submitInfo.pCommandBuffers = &commandBuffers[imageIndex];
        submitInfo.signalSemaphoreCount = 1;
-       submitInfo.pSignalSemaphores = &renderFinishedSemaphore;
+       submitInfo.pSignalSemaphores = &renderFinishedSemaphores[currentFrame];
 
-       graphicsQueue.submit(submitInfo, inFlightFence);
+       graphicsQueue.submit(submitInfo, inFlightFences[currentFrame]);
 
        vk::PresentInfoKHR presentInfo;
        presentInfo.waitSemaphoreCount = 1;
-       presentInfo.pWaitSemaphores = &renderFinishedSemaphore;
+       presentInfo.pWaitSemaphores = &renderFinishedSemaphores[currentFrame];
        presentInfo.swapchainCount = 1;
        presentInfo.pSwapchains = &swapChain;
        presentInfo.pImageIndices = &imageIndex;
-
        presentQueue.presentKHR(presentInfo);
-
-       device.waitForFences(inFlightFence, VK_TRUE, UINT64_MAX);
-
-       device.destroySemaphore(imageAvailableSemaphore);
-       device.destroySemaphore(renderFinishedSemaphore);
-       device.destroyFence(inFlightFence);
+       currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
    }
 
-   void Context::cleanup() {
-       for (auto framebuffer : swapChainFramebuffers) {
-           device.destroyFramebuffer(framebuffer);
-       }
+    void Context::cleanup() {
+        for (auto framebuffer : swapChainFramebuffers) {
+            device.destroyFramebuffer(framebuffer);
+        }
+        // 销毁信号量和fence
+        for (int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+            device.destroySemaphore(imageAvailableSemaphores[i]);
+            device.destroySemaphore(renderFinishedSemaphores[i]);
+            device.destroyFence(inFlightFences[i]);
+        }
 
-       device.destroyPipeline(graphicsPipeline);
-       device.destroyPipelineLayout(pipelineLayout);
-       device.destroyRenderPass(renderPass);
+        device.destroyPipeline(graphicsPipeline);
+        device.destroyPipelineLayout(pipelineLayout);
+        device.destroyRenderPass(renderPass);
 
-       for (auto imageView : swapChainImageViews) {
-           device.destroyImageView(imageView);
-       }
+        for (auto imageView : swapChainImageViews) {
+            device.destroyImageView(imageView);
+        }
 
-       device.destroySwapchainKHR(swapChain);
-       device.destroy();
-   }
+        device.destroySwapchainKHR(swapChain);
+
+        // 先释放 command buffer
+        device.freeCommandBuffers(commandPool, commandBuffers);
+
+        // 再销毁 command pool
+        device.destroyCommandPool(commandPool);
+
+        // 最后销毁 device
+        device.destroy();
+    }
 }

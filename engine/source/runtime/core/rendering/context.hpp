@@ -43,7 +43,12 @@ namespace  Hybrid {
         vk::Device device;
         vk::Queue graphicsQueue;
         vk::Queue presentQueue;
-        
+        std::vector<vk::Semaphore> imageAvailableSemaphores;
+        std::vector<vk::Semaphore> renderFinishedSemaphores;
+        std::vector<vk::Fence> inFlightFences;
+        size_t currentFrame = 0;
+        const int MAX_FRAMES_IN_FLIGHT = 2; // 或 swapchain image count
+
         vk::SwapchainKHR swapChain  = vk::SwapchainKHR();
         std::vector<vk::Image> swapChainImages;
         vk::Format swapChainImageFormat;
