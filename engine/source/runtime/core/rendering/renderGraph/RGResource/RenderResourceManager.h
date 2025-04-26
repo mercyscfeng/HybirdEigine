@@ -1,0 +1,16 @@
+//
+// Created by Administrator on 2025/4/26.
+//
+
+#ifndef HYBIRDENGINE_RENDERRESOURCEMANAGER_H
+#define HYBIRDENGINE_RENDERRESOURCEMANAGER_H
+
+
+
+class RenderResourceManager {
+
+};
+
+
+
+#endif //HYBIRDENGINE_RENDERRESOURCEMANAGER_H
