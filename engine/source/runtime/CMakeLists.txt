@@ -11,6 +11,8 @@ add_library(${TARGET_NAME}
         function/framework/component/camera/camera.h
         core/math/vector4.cpp
         core/math/vector4.h
+        util/FileMgr.cpp
+        util/FileMgr.h
 )
 target_link_libraries(${TARGET_NAME} PUBLIC glfw)
 

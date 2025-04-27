@@ -1,14 +1,32 @@
-//
-// Created by Administrator on 2025/4/26.
-//
+#include "vulkan/vulkan.hpp"
+#include <iostream>
+#include <vector>
+#include <string>
 
-#ifndef HYBIRDENGINE_VULKANRENDERPASS_H
-#define HYBIRDENGINE_VULKANRENDERPASS_H
+#include "../../../util/FileMgr.h"
+
+namespace Hybird{
+    class VulkanPassType
+    {
+
+    };
+    enum ShaderType{
+        Vertex,
+        Fragment,
+        Compute
+    };
+
+    class VulkanRenderPass {
+    public:
+        VulkanRenderPass();
+        void CreateShaderModule(const std::string& shaderPath, const ShaderType& type);
+    private:
+        std::string m_name;
+        vk::ShaderModule m_fragShader;
+        vk::ShaderModule m_vertShader;
+        vk::ShaderModule m_compShader;
+        vk::ShaderModule GetShader(const ShaderType& type);
+    };
+}
 
 
-class VulkanRenderPass {
-
-};
-
-
-#endif //HYBIRDENGINE_VULKANRENDERPASS_H

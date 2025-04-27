@@ -334,12 +334,10 @@ namespace Hybrid{
        rasterizer.frontFace = vk::FrontFace::eClockwise;
        rasterizer.depthBiasEnable = VK_FALSE;
 //
-//       // ���ز���
        vk::PipelineMultisampleStateCreateInfo multisampling;
        multisampling.sampleShadingEnable = VK_FALSE;
        multisampling.rasterizationSamples = vk::SampleCountFlagBits::e1;
 //
-//       // ��ɫ���
        vk::PipelineColorBlendAttachmentState colorBlendAttachment;
        colorBlendAttachment.colorWriteMask = vk::ColorComponentFlagBits::eR | vk::ColorComponentFlagBits::eG | vk::ColorComponentFlagBits::eB | vk::ColorComponentFlagBits::eA;
        colorBlendAttachment.blendEnable = VK_FALSE;
@@ -469,6 +467,7 @@ namespace Hybrid{
    }
 
     void Context::cleanup() {
+        device.waitIdle();
         for (auto framebuffer : swapChainFramebuffers) {
             device.destroyFramebuffer(framebuffer);
         }
